@@ -54,9 +54,9 @@ void CCheat::Process()
 }
 
 /*
- * @var float x
- * @var float y
- * @var float z
+ * @param float x
+ * @param float y
+ * @param float z
 */
 void CCheat::UpdateMarkerCoords(float x, float y, float z)
 {
@@ -68,7 +68,7 @@ void CCheat::UpdateMarkerCoords(float x, float y, float z)
 }
 
 /*
- * @var int stepId
+ * @param int stepId
 */
 void CCheat::SetMenuStep(int stepId)
 {
@@ -86,8 +86,8 @@ int CCheat::GetMenuStep()
 }
 
 /*
- * @var int 		renderId
- * @var uint8_t 	state
+ * @param int 		renderId
+ * @param uint8_t 	state
 */
 void CCheat::ToggleRender(int renderId, uint8_t state)
 {
@@ -122,7 +122,7 @@ void CCheat::ToggleRender(int renderId, uint8_t state)
 }
 
 /*
- * @var int patchId
+ * @param int patchId
 */
 void CCheat::ToggleGTAPatch(int patchId)
 {
@@ -189,7 +189,7 @@ void CCheat::ToggleGTAPatch(int patchId)
 }
 
 /*
- * @var int posId
+ * @param int posId
 */
 void CCheat::ToggleTeleport(int posId)
 {
@@ -215,7 +215,7 @@ void CCheat::ToggleTeleport(int posId)
 }	
 
 /*
- * @var int cheatId
+ * @param int cheatId
 */
 void CCheat::ToggleCheat(int cheatId)
 {
@@ -270,7 +270,7 @@ void CCheat::ToggleCheat(int cheatId)
 }
 
 /*
- * @var int nopId
+ * @param int nopId
 */
 void CCheat::ToggleNOP(int nopId)
 {
@@ -322,7 +322,7 @@ void CCheat::GenerateOutcomingPackets() { return CCheat::GetClass()->GenerateOut
 // -------------------- EVENTS BEGIN -------------------- //
 
 /*
- * @var int eventId
+ * @param int eventId
 */
 void CCheat::PadEvent(int eventId)
 {
@@ -337,7 +337,7 @@ void CCheat::PadEvent(int eventId)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -347,7 +347,7 @@ bool onSendTextDraw(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -357,7 +357,7 @@ bool onSendMenuRow(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -367,7 +367,7 @@ bool onSendSAMPKey(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -377,7 +377,7 @@ bool onLegitSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -387,7 +387,7 @@ bool onRageSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -397,7 +397,7 @@ bool onVisualSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -407,7 +407,7 @@ bool onWeaponsSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -417,7 +417,7 @@ bool onTeleportsSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -427,7 +427,7 @@ bool onGTAPatchesSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
@@ -437,7 +437,7 @@ bool onSAMPPatchesSelected(uint8_t action)
 }
 
 /*
- * @var uint8_t action
+ * @param uint8_t action
  *
  * @return bool
 */
