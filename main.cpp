@@ -14,7 +14,7 @@
  *
  * @author 		Codeesar
  * @link 		https://vk.com/artemkodisarov
- * @community 	https://vk.com/mobile.samp
+ * @community 		https://vk.com/mobile.samp
  *
  *
 */
