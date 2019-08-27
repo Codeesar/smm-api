@@ -28,12 +28,12 @@
 
 char* GetAPIVersion()
 {
-	return API_VERSION;
+    return API_VERSION;
 }
 
 char* GetSMMVersion()
 {
-	return SMM_VERSION;
+    return SMM_VERSION;
 }
 
 // ------------------------------------------------------ //
@@ -44,13 +44,13 @@ char* GetSMMVersion()
 */
 CCheat* CCheat::GetClass()
 {
-	return ((CCheat*)this);
+    return ((CCheat*)this);
 }
 
 // Main loop of CCheat::class
 void CCheat::Process()
 {
-	CCheat::GetClass()->Process();
+    CCheat::GetClass()->Process();
 }
 
 /*
@@ -60,11 +60,11 @@ void CCheat::Process()
 */
 void CCheat::UpdateMarkerCoords(float x, float y, float z)
 {
-	CCheat::GetClass()->marker_X = x;
-	CCheat::GetClass()->marker_Y = y;
-	CCheat::GetClass()->marker_Z = z;
+    CCheat::GetClass()->marker_X = x;
+    CCheat::GetClass()->marker_Y = y;
+    CCheat::GetClass()->marker_Z = z;
 
-	return;
+    return;
 }
 
 /*
@@ -82,7 +82,7 @@ void CCheat::SetMenuStep(int stepId)
 */
 int CCheat::GetMenuStep() 
 {
-	return ((int)CCheat::GetClass()->m_bMenuCurrentStepId);
+    return ((int)CCheat::GetClass()->m_bMenuCurrentStepId);
 }
 
 /*
@@ -91,23 +91,23 @@ int CCheat::GetMenuStep()
 */
 void CCheat::ToggleRender(int renderId, uint8_t state)
 {
-	switch(renderId)
-	{
-		case ID_RENDER_CHEATBOX:
-			CCheat::GetClass()->m_bCheatBoxState = state;
-		break;
+    switch(renderId)
+    {
+	case ID_RENDER_CHEATBOX:
+	    CCheat::GetClass()->m_bCheatBoxState = state;
+	break;
 
-		case ID_RENDER_CHEATMENU:
-			CCheat::GetClass()->m_bMenuState = state;
-		break;
+	case ID_RENDER_CHEATMENU:
+	    CCheat::GetClass()->m_bMenuState = state;
+	break;
 
-		case ID_RENDER_CLICKSENDER:
-			CCheat::GetClass()->m_bClickSenderState = state;
-		break;
+	case ID_RENDER_CLICKSENDER:
+	    CCheat::GetClass()->m_bClickSenderState = state;
+	break;
 
-		case ID_RENDER_KEYS:
-			CCheat::GetClass()->m_bKeysState = state;
-		break;
+	case ID_RENDER_KEYS:
+	    CCheat::GetClass()->m_bKeysState = state;
+	break;
 
         case ID_RENDER_NOCLIPTOOLS:
             CCheat::GetClass()->m_bNoClipState = state;
@@ -116,9 +116,9 @@ void CCheat::ToggleRender(int renderId, uint8_t state)
         case ID_RENDER_SKINCHANGER:
             CCheat::GetClass()->m_bSkinChangerState = state;
         break;
-	}
+    }
 
-	return;
+    return;
 }
 
 /*
@@ -126,7 +126,7 @@ void CCheat::ToggleRender(int renderId, uint8_t state)
 */
 void CCheat::ToggleGTAPatch(int patchId)
 {
-	switch(patchId)
+    switch(patchId)
     {
         case ID_GTAPATCH_MONEY:
         CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_MONEY);
@@ -193,25 +193,25 @@ void CCheat::ToggleGTAPatch(int patchId)
 */
 void CCheat::ToggleTeleport(int posId)
 {
-	switch(posId)
-	{
-		case 0: // City Hall
+    switch(posId)
+    {
+	case 0: // City Hall
     	CCheat::GetClass()->ToggleTeleport(0);
     	break;
 
     	// ... from 0 to 55 ...
     	// too lazy to bear it all
 
-		case 55: // Alhambra
+	case 55: // Alhambra
     	CCheat::GetClass()->ToggleTeleport(55);
     	break;
 	
-		case 69: // Marker
+	case 69: // Marker
     	CCheat::GetClass()->ToggleTeleport(69);
     	break;
-	}
+    }
 
-	return;
+    return;
 }	
 
 /*
@@ -219,7 +219,7 @@ void CCheat::ToggleTeleport(int posId)
 */
 void CCheat::ToggleCheat(int cheatId)
 {
-	switch(cheatId)
+    switch(cheatId)
     { 
         case ID_CHEAT_INVINCIBLE:
         CCheat::GetClass()->ToggleCheat(ID_CHEAT_INVINCIBLE);
@@ -274,7 +274,7 @@ void CCheat::ToggleCheat(int cheatId)
 */
 void CCheat::ToggleNOP(int nopId)
 {
-	switch(nopId)
+    switch(nopId)
     {
         case ID_NOP_SETENGINESTATE:
         CCheat::GetClass()->ToggleNOP(ID_NOP_SETENGINESTATE);
@@ -286,11 +286,11 @@ void CCheat::ToggleNOP(int nopId)
 
 void CCheat::Render() 
 { 
-	CCheat::GetClass()->RenderCheatBox();
-	CCheat::GetClass()->RenderKeys();
+    CCheat::GetClass()->RenderCheatBox();
+    CCheat::GetClass()->RenderKeys();
     CCheat::GetClass()->RenderNoClipTools();
-	CCheat::GetClass()->RenderClickSender();
-	CCheat::GetClass()->RenderCheatMenu();
+    CCheat::GetClass()->RenderClickSender();
+    CCheat::GetClass()->RenderCheatMenu();
     CCheat::GetClass()->RenderSkinChanger();
 
     if(CCheat::GetClass()->pDialogWindow) CCheat::GetClass()->pDialogWindow->Render();
