@@ -5,26 +5,32 @@
  *  ▀▀▀▄▄  █ █ █  █ █ █ 　  █▄▄█  █▄▄█  █  
  *  █▄▄▄█  █   █  █   █ 　  █  █  █    ▄█▄ 
  *
- * SA-MP MOD Mobile the reciprocal interaction API
+ *  SA-MP MOD Mobile the reciprocal interaction API
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author 		Codeesar
- * @link 		https://vk.com/artemkodisarov
- * @community 		https://vk.com/mobile.samp
+ * @author          Codeesar
+ * @link            https://vk.com/artemkodisarov
+ * @community       https://vk.com/mobile.samp
  *
  *
 */
 
 #include "main.h"
+#include <math.h>
 
-#define API_VERSION 	"1.0"
-#define SMM_VERSION 	"0.0.0.6"
+#define API_VERSION         "1.1.0"
+#define SMM_VERSION         "0.0.0.6"
 
-// ------------------------------------------------------ //
+#define CORE_PROTOCOL       96
+#define INVALID_CLASS       0xFFF
+#define UNAVAILABLE_API     0xFFF
+#define M_PI                3.14159265358979323846
+
+// ------------------------------------------------------------------------------------------------------ //
 
 char* GetAPIVersion()
 {
@@ -36,21 +42,65 @@ char* GetSMMVersion()
     return SMM_VERSION;
 }
 
-// ------------------------------------------------------ //
+int GetCoreProtocol()
+{
+    return CORE_PROTOCOL;
+}
 
+uint32_t m_bProtocolBack = 0;
+uint32_t m_bProtocolBackMin = 0;
+uint32_t m_bProtocolBackMax = 0;
+uint32_t m_bProtocolBackFinal = 0;
+void InitProtocol()
+{
+    m_bProtocolBack = ((atan(((uint32_t)GetCoreProtocol()) / M_PI * 4.25) + 256) / 0.005);
+    m_bProtocolBackMin = m_bProtocolBack / ((uint32_t)GetCoreProtocol());
+    m_bProtocolBackMax = m_bProtocolBack * ((uint32_t)GetCoreProtocol());
+    m_bProtocolBackFinal = m_bProtocolBackMax - m_bProtocolBackMin;
+}
+
+// ------------------------------------------------------------------------------------------------------ //
 
 /*
  * @return CCheat
 */
 CCheat* CCheat::GetClass()
 {
-    return ((CCheat*)this);
+    InitProtocol();   
+
+    if(GetAPIVersion() == UNAVAILABLE_API or m_bProtocolBackFinal <= 0) 
+        return ((CCheat*) INVALID_CLASS);
+
+    return ((CCheat*) this);
 }
 
 // Main loop of CCheat::class
 void CCheat::Process()
 {
     CCheat::GetClass()->Process();
+}
+
+/*
+ * @return float
+*/
+float CCheat::GetNoClipSpeed()
+{
+    return ((float)CCheat::GetClass()->m_bNoClipSpeed);
+}
+
+/*
+ * @param float speed
+*/
+void CCheat::SetNoClipSpeed(float speed)
+{
+    CCheat::GetClass()->m_bNoClipSpeed = speed;
+
+    return;
+}
+
+void CCheat::TPLook()
+{
+    return CCheat::GetClass()->TPLook();
 }
 
 /*
@@ -93,28 +143,32 @@ void CCheat::ToggleRender(int renderId, uint8_t state)
 {
     switch(renderId)
     {
-	case ID_RENDER_CHEATBOX:
+        case ID_RENDER_CHEATBOX:
 	    CCheat::GetClass()->m_bCheatBoxState = state;
-	break;
+        break;
 
-	case ID_RENDER_CHEATMENU:
-	    CCheat::GetClass()->m_bMenuState = state;
-	break;
+        case ID_RENDER_CHEATMENU:
+        CCheat::GetClass()->m_bMenuState = state;
+        break;
 
-	case ID_RENDER_CLICKSENDER:
-	    CCheat::GetClass()->m_bClickSenderState = state;
-	break;
+        case ID_RENDER_CLICKSENDER:
+        CCheat::GetClass()->m_bClickSenderState = state;
+        break;
 
-	case ID_RENDER_KEYS:
-	    CCheat::GetClass()->m_bKeysState = state;
-	break;
-
-        case ID_RENDER_NOCLIPTOOLS:
-            CCheat::GetClass()->m_bNoClipState = state;
+        case ID_RENDER_KEYS:
+        CCheat::GetClass()->m_bKeysState = state;
         break;
 
         case ID_RENDER_SKINCHANGER:
-            CCheat::GetClass()->m_bSkinChangerState = state;
+        CCheat::GetClass()->m_bSkinChangerState = state;
+        break;
+
+        case ID_RENDER_NOCLIPTOOLS:
+        CCheat::GetClass()->m_bNoClipState = state;
+        break;
+
+        case ID_RENDER_WARP:
+        CCheat::GetClass()->m_bWarpState = state;
         break;
     }
 
@@ -126,92 +180,34 @@ void CCheat::ToggleRender(int renderId, uint8_t state)
 */
 void CCheat::ToggleGTAPatch(int patchId)
 {
-    switch(patchId)
-    {
-        case ID_GTAPATCH_MONEY:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_MONEY);
-        break;
+    return CCheat::GetClass()->ToggleGTAPatch(patchId);
+}
 
-        case ID_GTAPATCH_NITRO:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_NITRO);
-        break;
+/*
+ * @param int rpcId
+*/
+void CCheat::ToggleRPC(int rpcId)
+{
+    return CCheat::GetClass()->ToggleRPC(rpcId);
+}
 
-        case ID_GTAPATCH_CLOCK:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_CLOCK);
-        break;
-
-        case ID_GTAPATCH_LOCKTIME:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_LOCKTIME);
-        break;
-
-        case ID_GTAPATCH_LOCKWEATHER:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_LOCKWEATHER);
-        break;
-
-        case ID_GTAPATCH_RADAR:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_RADAR);
-        break;
-
-        case ID_GTAPATCH_FASTFIRE:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_FASTFIRE);
-        break;
-
-        case ID_GTAPATCH_CARINVISIBLE:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_CARINVISIBLE);
-        break;
-
-        case ID_GTAPATCH_DRIVEBY:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_DRIVEBY);
-        break;
-
-        case ID_GTAPATCH_SUICIDE:
-        pGame->FindPlayerPed()->SetHealth(-1);
-        break;
-
-        case ID_GTAPATCH_JETPACK:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_JETPACK);
-        break;
-
-        case ID_GTAPATCH_BLOWUPCARS:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_BLOWUPCARS);
-        break;
-
-        case ID_GTAPATCH_INFINITYSPRINT:
-      	// not using
-        break;
-
-        case ID_GTAPATCH_CJWALK:
-        CCheat::GetClass()->ToggleGTAPatch(ID_GTAPATCH_CJWALK);
-        break;
-    }
-
-    return;
+/*
+ * @param int packetId
+*/
+void CCheat::TogglePacket(int packetId)
+{
+    return CCheat::GetClass()->TogglePacket(packetId);
 }
 
 /*
  * @param int posId
 */
+#define MIN_POS     0
+#define MAX_POS     55
+#define MARKER_POS  69
 void CCheat::ToggleTeleport(int posId)
 {
-    switch(posId)
-    {
-	case 0: // City Hall
-    	CCheat::GetClass()->ToggleTeleport(0);
-    	break;
-
-    	// ... from 0 to 55 ...
-    	// too lazy to bear it all
-
-	case 55: // Alhambra
-    	CCheat::GetClass()->ToggleTeleport(55);
-    	break;
-	
-	case 69: // Marker
-    	CCheat::GetClass()->ToggleTeleport(69);
-    	break;
-    }
-
-    return;
+    return CCheat::GetClass()->ToggleTeleport(posId);
 }	
 
 /*
@@ -219,54 +215,7 @@ void CCheat::ToggleTeleport(int posId)
 */
 void CCheat::ToggleCheat(int cheatId)
 {
-    switch(cheatId)
-    { 
-        case ID_CHEAT_INVINCIBLE:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_INVINCIBLE);
-        break;
-
-        case ID_CHEAT_WALLHACK:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_WALLHACK);
-        break;
-
-        case ID_CHEAT_FREEZE:
-       	CCheat::GetClass()->ToggleCheat(ID_CHEAT_FREEZE);
-        break;
-
-        case ID_CHEAT_BEHIND:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_BEHIND);
-        break;
-
-        case ID_CHEAT_NOFALL:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_NOFALL);
-        break;
-
-        case ID_CHEAT_INVISIBLE:
-       	CCheat::GetClass()->ToggleCheat(ID_CHEAT_INVISIBLE);
-        break;
-
-        case ID_CHEAT_FLASH:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_FLASH);
-        break;
-
-        case ID_CHEAT_AIRBREAK:
-       	// not using
-        break;
-
-        case ID_CHEAT_HPPULSATOR:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_HPPULSATOR);
-        break;
-
-        case ID_CHEAT_ARMPULSATOR:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_ARMPULSATOR);
-        break;
-
-        case ID_CHEAT_NOCLIP:
-        CCheat::GetClass()->ToggleCheat(ID_CHEAT_NOCLIP);
-        break;
-    }
-
-    return;
+    return CCheat::GetClass()->ToggleCheat(cheatId);
 }
 
 /*
@@ -274,12 +223,7 @@ void CCheat::ToggleCheat(int cheatId)
 */
 void CCheat::ToggleNOP(int nopId)
 {
-    switch(nopId)
-    {
-        case ID_NOP_SETENGINESTATE:
-        CCheat::GetClass()->ToggleNOP(ID_NOP_SETENGINESTATE);
-        break;
-    }
+    // not using
 
     return;
 }
@@ -292,32 +236,15 @@ void CCheat::Render()
     CCheat::GetClass()->RenderClickSender();
     CCheat::GetClass()->RenderCheatMenu();
     CCheat::GetClass()->RenderSkinChanger();
+    CCheat::GetClass()->RenderWarp();
 
-    if(CCheat::GetClass()->pDialogWindow) CCheat::GetClass()->pDialogWindow->Render();
-    if(CCheat::GetClass()->pKeyBoard) CCheat::GetClass()->pKeyBoard->Render();
+    if(CCheat::GetClass()->pDialogWindow) 
+        CCheat::GetClass()->pDialogWindow->Render();
+    if(CCheat::GetClass()->pKeyBoard) 
+        CCheat::GetClass()->pKeyBoard->Render();
 
     return;
 }
-
-void CCheat::RenderCheatMenu() { return CCheat::GetClass()->RenderCheatMenu(); }
-void CCheat::RenderCheatBox() { return CCheat::GetClass()->RenderCheatBox(); }
-void CCheat::RenderClickSender() { return CCheat::GetClass()->RenderClickSender(); }
-void CCheat::RenderKeys() { return CCheat::GetClass()->RenderKeys(); }
-void CCheat::RenderNoClipTools() { return CCheat::GetClass()->RenderNoClipTools(); }
-void CCheat::RenderSkinChanger() { return CCheat::GetClass()->RenderSkinChanger(); }
-
-void CCheat::GenerateBasic() { return CCheat::GetClass()->GenerateBasic(); }
-void CCheat::GenerateLegit() { return CCheat::GetClass()->GenerateLegit(); }
-void CCheat::GenerateRage() { return CCheat::GetClass()->GenerateRage(); }
-void CCheat::GenerateVisual() { return CCheat::GetClass()->GenerateVisual(); }
-void CCheat::GenerateGTAPatches() { return CCheat::GetClass()->GenerateGTAPatches(); }
-void CCheat::GenerateSAMPPatches() { return CCheat::GetClass()->GenerateSAMPPatches(); }
-void CCheat::GenerateTeleports() { return CCheat::GetClass()->GenerateTeleports(); }
-void CCheat::GenerateWeapons() { return CCheat::GetClass()->GenerateWeapons(); }
-void CCheat::GenerateIncomingRPC() { return CCheat::GetClass()->GenerateIncomingRPC(); }
-void CCheat::GenerateOutcomingRPC() { return CCheat::GetClass()->GenerateOutcomingRPC(); }
-void CCheat::GenerateIncomingPackets() { return CCheat::GetClass()->GenerateIncomingPackets(); }
-void CCheat::GenerateOutcomingPackets() { return CCheat::GetClass()->GenerateOutcomingPackets(); }
 
 // -------------------- EVENTS BEGIN -------------------- //
 
@@ -326,14 +253,7 @@ void CCheat::GenerateOutcomingPackets() { return CCheat::GetClass()->GenerateOut
 */
 void CCheat::PadEvent(int eventId)
 {
-    switch(eventId)
-    {
-        case PADEVENT_JUMP: // onPlayerJump
-        CCheat::GetClass()->PadEvent(PADEVENT_JUMP);
-        break;
-    }
-
-    return;
+    return CCheat::GetClass()->PadEvent(eventId);
 }
 
 /*
@@ -447,3 +367,32 @@ bool onBackPressed(uint8_t action)
 }
 
 // -------------------- EVENTS END -------------------- //
+
+// -------------------- RENDER BEGIN -------------------- //
+
+void CCheat::RenderCheatMenu() { return CCheat::GetClass()->RenderCheatMenu(); }
+void CCheat::RenderCheatBox() { return CCheat::GetClass()->RenderCheatBox(); }
+void CCheat::RenderClickSender() { return CCheat::GetClass()->RenderClickSender(); }
+void CCheat::RenderKeys() { return CCheat::GetClass()->RenderKeys(); }
+void CCheat::RenderNoClipTools() { return CCheat::GetClass()->RenderNoClipTools(); }
+void CCheat::RenderSkinChanger() { return CCheat::GetClass()->RenderSkinChanger(); }
+void CCheat::RenderWarp() { return CCheat::GetClass()->RenderWarp(); }
+
+// -------------------- RENDER END -------------------- //
+
+// -------------------- MENU GENERATOR BEGIN -------------------- //
+
+void CCheat::GenerateBasic() { return CCheat::GetClass()->GenerateBasic(); }
+void CCheat::GenerateLegit() { return CCheat::GetClass()->GenerateLegit(); }
+void CCheat::GenerateRage() { return CCheat::GetClass()->GenerateRage(); }
+void CCheat::GenerateVisual() { return CCheat::GetClass()->GenerateVisual(); }
+void CCheat::GenerateGTAPatches() { return CCheat::GetClass()->GenerateGTAPatches(); }
+void CCheat::GenerateSAMPPatches() { return CCheat::GetClass()->GenerateSAMPPatches(); }
+void CCheat::GenerateTeleports() { return CCheat::GetClass()->GenerateTeleports(); }
+void CCheat::GenerateWeapons() { return CCheat::GetClass()->GenerateWeapons(); }
+void CCheat::GenerateIncomingRPC() { return CCheat::GetClass()->GenerateIncomingRPC(); }
+void CCheat::GenerateOutcomingRPC() { return CCheat::GetClass()->GenerateOutcomingRPC(); }
+void CCheat::GenerateIncomingPackets() { return CCheat::GetClass()->GenerateIncomingPackets(); }
+void CCheat::GenerateOutcomingPackets() { return CCheat::GetClass()->GenerateOutcomingPackets(); }
+
+// -------------------- MENU GENERATOR END -------------------- //
