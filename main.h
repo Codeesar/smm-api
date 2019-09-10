@@ -240,6 +240,8 @@ public:
 	void ToggleCheat(int cheatId);
 	void ToggleNOP(int nopId);
 
+	void CoordMasterLoop(float x, float y);
+
 	void SetMenuStep(int stepId);
 	int GetMenuStep();
 

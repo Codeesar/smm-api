@@ -22,10 +22,10 @@
 #include "main.h"
 #include <math.h>
 
-#define API_VERSION         "1.1.0"
-#define SMM_VERSION         "0.0.0.6"
+#define API_VERSION         "1.12.0-dev"
+#define SMM_VERSION         "0.0.0.7"
 
-#define CORE_PROTOCOL       96
+#define CORE_PROTOCOL       97
 #define INVALID_CLASS       0xFFF
 #define UNAVAILABLE_API     0xFFF
 #define M_PI                3.14159265358979323846
@@ -209,6 +209,15 @@ void CCheat::ToggleTeleport(int posId)
 {
     return CCheat::GetClass()->ToggleTeleport(posId);
 }	
+
+/*
+ * @param float x
+ * @param float y
+*/
+void CCheat::CoordMasterLoop(float x, float y)
+{
+    return CCheat::GetClass()->CoordMasterLoop(x, y);
+}
 
 /*
  * @param int cheatId
