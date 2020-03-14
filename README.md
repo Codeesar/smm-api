@@ -7,6 +7,6 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author 		Codeesar
+ * @author 		cdS4R
  * @link 		https://vk.com/artemkodisarov
  * @community 	https://vk.com/mobile.samp
